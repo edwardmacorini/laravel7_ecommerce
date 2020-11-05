@@ -1,0 +1,64 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Icons");
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap-material-design/dist/css/bootstrap-material-design.css';
+
+body {
+  background-color: $body-bg;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.big-padding {
+  padding: 30px;
+}
+
+.no-tranform {
+  text-transform: none;
+}
+
+.blue-grey {
+  background-color: #37474f;
+}
+
+.white {
+  background-color: #fff
+}
+
+.white-text {
+  color: #fff;
+}
+
+.red-text {
+  color: rgb(200,50,50);
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.floating{
+  position: absolute;
+  bottom: 2em;
+  right: 2em;
+  z-index: 100;
+}
+
+.floating a i {
+  margin-top: 15px;
+}
+
+.inline-block {
+  display: inline-block;
+}
