@@ -15,8 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'MainController@home');
 
+Route::get('/carrito', 'ShoppingCartsController@index');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('products', 'ProductsController');
+
+Route::resource('in_shopping_carts', 'InShoppingCartsController')->only([
+  'store','destroy'
+]);
