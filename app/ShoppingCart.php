@@ -29,6 +29,10 @@ class ShoppingCart extends Model
     return $this->products()->sum('pricing');
   }
 
+  public function total_USD() {
+    return $this->total() / 100;
+  }
+
   //Metodo para buscar una session si no la encuentra la crea
   public static function findOrCreateBySessionID($shopping_cart_id) {
 

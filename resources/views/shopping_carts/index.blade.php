@@ -27,6 +27,9 @@
       </tr>
     </tbody>
   </table>
+  <div class="text-center">
+    <a class="btn btn-info active" href="{{url('paypal/pay')}}">Paypal</a>
+  </div>
 </div>
 
 @endsection
