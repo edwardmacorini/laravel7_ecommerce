@@ -13,6 +13,20 @@ class ShoppingCart extends Model
   // Mas assignment
   protected $fillable = ['status'];
 
+  public function approved() {
+    $this->updateCustomIDAndStatus();
+  }
+
+  public function generateCustomID() {
+    return md5("$this->id $this->updated_at");
+  }
+
+  public function updateCustomIDAndStatus() {
+    $this->status = "approved";
+    $this->customid = $this->generateCustomID();
+    $this->save(); 
+  }
+
   public function inShoppingCart() {
     return $this->hasMany('App\InShoppingCart');
   }

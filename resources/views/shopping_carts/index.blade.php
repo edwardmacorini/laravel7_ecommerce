@@ -28,7 +28,10 @@
     </tbody>
   </table>
   <div class="text-center">
-    <a class="btn btn-info active" href="{{url('paypal/pay')}}">Paypal</a>
+    {!! Form::open(['url' => '/paypal/pay', 'method' => 'post']) !!}
+      <input type="hidden" name="total_USD" value="{{$total_USD}}">
+      <input type="submit" value="Paypal" class="btn btn-info active">
+    {!! Form::close() !!}
   </div>
 </div>
 

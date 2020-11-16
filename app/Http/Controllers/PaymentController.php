@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\ShoppingCart;
+use App\Order;
 use PayPal\Rest\ApiContext;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Api\Payer;
@@ -33,13 +35,13 @@ class PaymentController extends Controller
 
   // ...
 
-  public function payWithPayPal()
+  public function payWithPayPal(Request $request)
   {
     $payer = new Payer();
     $payer->setPaymentMethod('paypal');
 
     $amount = new Amount();
-    $amount->setTotal('3.99');
+    $amount->setTotal($request->total_USD);
     $amount->setCurrency('USD');
 
     $transaction = new Transaction();
@@ -50,13 +52,13 @@ class PaymentController extends Controller
 
     $redirectUrls = new RedirectUrls();
     $redirectUrls->setReturnUrl("$callbackUrl/paypal/status")
-      ->setCancelUrl("$callbackUrl/carrito");
+                 ->setCancelUrl("$callbackUrl/carrito");
 
     $payment = new Payment();
     $payment->setIntent('sale')
-      ->setPayer($payer)
-      ->setTransactions(array($transaction))
-      ->setRedirectUrls($redirectUrls);
+            ->setPayer($payer)
+            ->setTransactions(array($transaction))
+            ->setRedirectUrls($redirectUrls);
 
     try {
       $payment->create($this->apiContext);
@@ -68,6 +70,9 @@ class PaymentController extends Controller
 
   public function payPalStatus(Request $request)
   {
+    $shopping_cart_id = \Session::get('shopping_cart_id');
+    $shopping_cart = ShoppingCart::findOrCreateBySessionID($shopping_cart_id);
+
     $paymentId = $request->input('paymentId');
     $payerId = $request->input('PayerID');
     $token = $request->input('token');
@@ -86,11 +91,18 @@ class PaymentController extends Controller
     $result = $payment->execute($execution, $this->apiContext);
 
     if ($result->getState() === 'approved') {
-      $status = 'Gracias! El pago a través de PayPal se ha ralizado correctamente.';
-      return redirect('/results')->with(compact('status'));
+      \Session::remove('shopping_cart_id');
+      $order = Order::createFromPayPalResponse($result, $shopping_cart);
+      $shopping_cart->approved();
+
+      return view('shopping_carts.completed', ['shopping_cart' => $shopping_cart, 'order' => $order]);
+
+      //$status = 'Gracias! El pago a través de PayPal se ha ralizado correctamente.';
+      //return redirect('/results')->with(compact('status'));
     }
 
     $status = 'Lo sentimos! El pago a través de PayPal no se pudo realizar.';
     return redirect('/results')->with(compact('status'));
   }
+
 }

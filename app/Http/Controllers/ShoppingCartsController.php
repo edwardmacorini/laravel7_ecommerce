@@ -27,7 +27,9 @@ class ShoppingCartsController extends Controller
 
     $total = $shopping_cart->total();
 
-    return view('shopping_carts.index', ['products' => $products, 'total' => $total]);
+    $total_USD = $shopping_cart->total_USD();
+
+    return view('shopping_carts.index', ['products' => $products, 'total' => $total, 'total_USD' => $total_USD]);
 
   }
 

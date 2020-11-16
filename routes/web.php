@@ -17,7 +17,7 @@ Route::get('/', 'MainController@home');
 
 Route::get('/carrito', 'ShoppingCartsController@index');
 
-Route::get('/paypal/pay', 'PaymentController@payWithPaypal');
+Route::post('/paypal/pay', 'PaymentController@payWithPaypal');
 
 Route::get('/paypal/status', 'PaymentController@payPalStatus');
 
